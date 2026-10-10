@@ -8,9 +8,25 @@ set -Eeuo pipefail
 readonly CONTAINER_NAME="whatsapp-proxy"
 readonly IMAGE="facebook/whatsapp_proxy:latest"
 readonly DATA_DIR="/opt/whatsapp-proxy"
+readonly INSTALL_PIN="027005"
 
 log() { printf '\n[%s] %s\n' "INFO" "$*"; }
 fail() { printf '\n[ERROR] %s\n' "$*" >&2; exit 1; }
+
+check_pin() {
+  local entered_pin
+  for attempt in 1 2 3; do
+    read -r -s -p "Masukkan PIN instalasi: " entered_pin
+    printf '\n'
+    if [[ "${entered_pin}" == "${INSTALL_PIN}" ]]; then
+      return 0
+    fi
+    printf 'PIN salah. Percobaan %s/3.\n' "${attempt}" >&2
+  done
+  fail "Terlalu banyak percobaan PIN yang salah."
+}
+
+check_pin
 
 [[ "${EUID}" -eq 0 ]] || fail "Jalankan sebagai root: sudo bash $0"
 command -v systemctl >/dev/null 2>&1 || fail "OS ini tidak menggunakan systemd. Gunakan Ubuntu/Debian dengan systemd."

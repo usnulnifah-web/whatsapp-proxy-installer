@@ -15,6 +15,16 @@ sudo bash install-whatsapp-proxy.sh
 
 Saat diminta, masukkan domain/subdomain yang mengarah ke IP server. Jika tidak memakai domain, tekan Enter dan skrip akan menggunakan IP publik server.
 
+Skrip juga meminta PIN instalasi:
+
+```text
+027005
+```
+
+PIN diperlukan sebelum proses instalasi dimulai dan dibatasi tiga percobaan.
+
+> **Penting:** PIN yang ditanam langsung di dalam skrip bukan pengamanan kriptografis. Siapa pun yang dapat membaca file skrip dapat melihat PIN tersebut. Gunakan repository privat dan batasi akses server bila PIN ini harus dirahasiakan.
+
 ## Yang dilakukan skrip
 
 - Mendukung Ubuntu dan Debian berbasis `systemd`.
