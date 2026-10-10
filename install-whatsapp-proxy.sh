@@ -42,6 +42,17 @@ case "${ID:-}" in
 esac
 
 export DEBIAN_FRONTEND=noninteractive
+
+# Some VPS images contain an expired or blocked Caddy Cloudsmith source.
+# It is unrelated to this installer and can make apt-get update abort.
+while IFS= read -r -d '' source_file; do
+  backup_file="${source_file}.disabled-by-whatsapp-proxy-installer"
+  if [[ ! -e "${backup_file}" ]]; then
+    mv "${source_file}" "${backup_file}"
+    log "Menonaktifkan sumber APT Caddy bermasalah: ${source_file}"
+  fi
+done < <(grep -RIlZ --include='*.list' --include='*.sources' 'dl\.cloudsmith\.io/public/caddy' /etc/apt/sources.list.d 2>/dev/null || true)
+
 apt-get update
 apt-get install -y ca-certificates curl ufw
 

@@ -34,6 +34,7 @@ PIN diperlukan sebelum proses instalasi dimulai dan dibatasi tiga percobaan.
 - Memetakan hanya `TCP 443:443` ke publik sesuai permintaan.
 - Mengaktifkan UFW dan mengizinkan SSH serta TCP 443.
 - Menyediakan perintah status, log, dan restart melalui Docker.
+- Menonaktifkan sumber APT Caddy Cloudsmith yang rusak jika ditemukan, agar instalasi tidak gagal karena repository pihak ketiga.
 
 ## Perintah pengelolaan
 
@@ -73,6 +74,8 @@ sudo ss -lntp | grep ':443'
 ```
 
 Jika port 443 sudah dipakai Nginx, Apache, atau layanan lain, hentikan layanan tersebut atau pilih server yang port 443-nya kosong.
+
+Jika ingin mengaktifkan kembali sumber Caddy yang dinonaktifkan installer, lihat file dengan akhiran `.disabled-by-whatsapp-proxy-installer` di `/etc/apt/sources.list.d/`, pastikan sumbernya valid, lalu kembalikan nama file tersebut.
 
 ## Sumber resmi
 
