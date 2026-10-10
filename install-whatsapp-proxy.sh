@@ -87,7 +87,13 @@ else
 fi
 
 log "Mengambil image resmi ${IMAGE}..."
-docker pull "${IMAGE}"
+if ! timeout 300 docker pull "${IMAGE}"; then
+  printf '\n[ERROR] Docker Registry tidak merespons atau image gagal diunduh setelah 5 menit.\n' >&2
+  printf '%s\n' "Periksa koneksi dengan: curl -4I --max-time 15 https://registry-1.docker.io/v2/" >&2
+  printf '%s\n' "Periksa daemon dengan: systemctl status docker --no-pager" >&2
+  printf '%s\n' "Log daemon: journalctl -u docker -n 80 --no-pager" >&2
+  exit 1
+fi
 
 docker rm -f "${CONTAINER_NAME}" >/dev/null 2>&1 || true
 log "Menjalankan proxy pada TCP port 443..."

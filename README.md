@@ -75,6 +75,23 @@ sudo ss -lntp | grep ':443'
 
 Jika port 443 sudah dipakai Nginx, Apache, atau layanan lain, hentikan layanan tersebut atau pilih server yang port 443-nya kosong.
 
+### Jika berhenti saat mengambil image Docker
+
+Versi installer terbaru membatasi proses `docker pull` hingga lima menit. Jika gagal, jalankan:
+
+```bash
+curl -4I --max-time 15 https://registry-1.docker.io/v2/
+systemctl status docker --no-pager
+journalctl -u docker -n 80 --no-pager
+```
+
+Jika Docker daemon macet, coba:
+
+```bash
+systemctl restart docker
+docker pull facebook/whatsapp_proxy:latest
+```
+
 Jika ingin mengaktifkan kembali sumber Caddy yang dinonaktifkan installer, lihat file dengan akhiran `.disabled-by-whatsapp-proxy-installer` di `/etc/apt/sources.list.d/`, pastikan sumbernya valid, lalu kembalikan nama file tersebut.
 
 ## Sumber resmi
